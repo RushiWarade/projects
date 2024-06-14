@@ -2,7 +2,7 @@
 <html class="light" lang="en" th:fragment="parent(content,title,script)" xmlns:th="http://www.thymleaf.org">
 
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF- 8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{'/css/output.css'}">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
@@ -15,6 +15,9 @@
 
 <div th:replace="~{navbar :: navbar}"></div>
 
+
+
+th:fragment="${content}"
 
 <body class="dark:bg-gray-700 dark:text-white ">
     <!-- main content  -->
