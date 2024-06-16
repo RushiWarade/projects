@@ -3,6 +3,7 @@ package com.smartcontact.smartcontactmanagement.entities;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
@@ -43,6 +44,7 @@ public class User {
     private boolean phoneVerified = false;
 
     // SELF,GOOGLE,GITHUB
+    @Enumerated
     private Providers providers = Providers.SELF;
     private String providerUserId;
 

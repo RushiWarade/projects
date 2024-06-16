@@ -75,6 +75,17 @@ function changePageTheme(theme, oldTheme) {
     // change text on the botton
     document.querySelector('#theme_change_button').querySelector('span').textContent = theme == "light" ? "dark" : "light";
 
-    
+
+    // Change the icon class
+    const icon = document.querySelector("#theme_change_button").querySelector('i');
+    if (theme === "light") {
+        icon.classList.remove('fa-sun'); // Assuming fa-sun is the icon for light theme
+        icon.classList.add('fa-circle-half-stroke'); // Assuming fa-moon is the icon for dark theme
+    } else {
+        icon.classList.remove('fa-circle-half-stroke'); // Assuming fa-moon is the icon for dark theme
+        icon.classList.add('fa-sun'); // Assuming fa-sun is the icon for light theme
+    }
+
+
 }
 
