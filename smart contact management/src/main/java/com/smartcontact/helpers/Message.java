@@ -1,4 +1,4 @@
-package com.smartcontact.smartcontactmanagement.helpers;
+package com.smartcontact.helpers;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,9 +1,9 @@
-package com.smartcontact.smartcontactmanagement.services;
+package com.smartcontact.services;
 
 import java.util.List;
 import java.util.Optional;
 
-import com.smartcontact.smartcontactmanagement.entities.User;
+import com.smartcontact.entities.User;
 
 public interface UserService {
 

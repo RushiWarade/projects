@@ -1,8 +1,7 @@
-package com.smartcontact.smartcontactmanagement.entities;
+package com.smartcontact.entities;
 
 import java.util.*;
 
-import org.hibernate.annotations.ManyToAny;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

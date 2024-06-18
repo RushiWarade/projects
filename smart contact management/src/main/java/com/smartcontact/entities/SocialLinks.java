@@ -1,4 +1,4 @@
-package com.smartcontact.smartcontactmanagement.entities;
+package com.smartcontact.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

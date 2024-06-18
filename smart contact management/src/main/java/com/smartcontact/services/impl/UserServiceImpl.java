@@ -1,4 +1,4 @@
-package com.smartcontact.smartcontactmanagement.services.impl;
+package com.smartcontact.services.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,12 +7,14 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.smartcontact.smartcontactmanagement.entities.User;
-import com.smartcontact.smartcontactmanagement.helpers.ResourceNotFoundException;
-import com.smartcontact.smartcontactmanagement.repositories.UserRepo;
-import com.smartcontact.smartcontactmanagement.services.UserService;
+import com.smartcontact.entities.User;
+import com.smartcontact.helpers.AppConstaints;
+import com.smartcontact.helpers.ResourceNotFoundException;
+import com.smartcontact.repositories.UserRepo;
+import com.smartcontact.services.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,17 +22,25 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public User saveUser(User user) {
-          // user id generate dynamic
-          String userId = UUID.randomUUID().toString();
-          user.setUserId(userId);
-          System.out.println(userId);
-  
-          // user.setProfilePic(userId);
-  
+        // user id generate dynamic
+        String userId = UUID.randomUUID().toString();
+        user.setUserId(userId);
+
+        // set password encoder
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // set user role
+
+        user.setRoleList(List.of(AppConstaints.ROLE_RSER));
+
+        logger.info(user.getProviders().toString());
 
         return userRepo.save(user);
     }
@@ -61,7 +71,6 @@ public class UserServiceImpl implements UserService {
 
         User save = userRepo.save(user2);
 
-      
         return Optional.ofNullable(save);
 
     }

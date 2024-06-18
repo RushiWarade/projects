@@ -1,11 +1,11 @@
-package com.smartcontact.smartcontactmanagement.repositories;
+package com.smartcontact.repositories;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.smartcontact.smartcontactmanagement.entities.User;
+import com.smartcontact.entities.User;
 
 @Repository
 public interface UserRepo extends JpaRepository<User,String>{
