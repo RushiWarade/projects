@@ -17,7 +17,6 @@ import com.smartcontact.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
@@ -90,7 +89,6 @@ public class PageController {
             return "register";
         }
 
-        // TODO::Validate userForm[Next Video]
 
         // save to database
 

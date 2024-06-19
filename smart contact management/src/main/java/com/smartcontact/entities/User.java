@@ -50,7 +50,8 @@ public class User implements UserDetails {
     private String phoneNumber;
 
     // information
-    private boolean enable = false;
+    @Getter(value = AccessLevel.NONE)
+    private boolean enabled = true;
     private boolean emailVerified = false;
     private boolean phoneVerified = false;
 
@@ -66,7 +67,7 @@ public class User implements UserDetails {
 
     // implemented method
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> roleList = new ArrayList<>();
 
     @Override
@@ -77,8 +78,13 @@ public class User implements UserDetails {
 
         List<SimpleGrantedAuthority> roles = roleList.stream().map(role -> new SimpleGrantedAuthority(role))
                 .collect(Collectors.toList());
+        // List<SimpleGrantedAuthority> roles = roleList.stream()
+        //         .map(SimpleGrantedAuthority::new)
+        //         .collect(Collectors.toList());
 
         return roles;
+
+        // return Collections.emptyList();
     }
 
     @Override
@@ -104,7 +110,7 @@ public class User implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return this.enable;
+        return this.enabled;
     }
 
     @Override

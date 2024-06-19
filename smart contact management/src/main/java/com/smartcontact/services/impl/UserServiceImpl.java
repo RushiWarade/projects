@@ -1,5 +1,6 @@
 package com.smartcontact.services.impl;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -38,7 +39,11 @@ public class UserServiceImpl implements UserService {
 
         // set user role
 
-        user.setRoleList(List.of(AppConstaints.ROLE_RSER));
+        user.setRoleList(List.of(AppConstaints.ROLE_USER));
+        // user.setRoleList(Collections.singletonList(AppConstaints.ROLE_USER));
+
+
+
 
         logger.info(user.getProviders().toString());
 
@@ -63,7 +68,7 @@ public class UserServiceImpl implements UserService {
         user2.setAbout(user.getAbout());
         user2.setPhoneNumber(user.getPhoneNumber());
         user2.setProfilePic(user.getProfilePic());
-        user2.setEnable(user.isEnable());
+        user2.setEnabled(user.isEnabled());
         user2.setEmailVerified(user.isEmailVerified());
         user2.setPhoneVerified(user.isPhoneVerified());
         user2.setProviders(user.getProviders());
