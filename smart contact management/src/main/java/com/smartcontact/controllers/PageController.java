@@ -17,12 +17,20 @@ import com.smartcontact.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 public class PageController {
 
     @Autowired
     private UserService userService;
+
+
+    @GetMapping("/")
+    public String index(){
+        return "redirect:/home";
+    }
 
     // home route
     @GetMapping("/home")

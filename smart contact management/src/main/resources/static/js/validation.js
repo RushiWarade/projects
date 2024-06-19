@@ -22,7 +22,16 @@ $(document).ready(function() {
                 required: true,
                 number: true,
                 min: 18
+            },
+            phoneNumber:{
+                required: true,
+                minlength : 10,
+                maxlength:13
+            },
+            about:{
+                required: true,
             }
+
         },
         messages: {
             name: {
@@ -44,6 +53,14 @@ $(document).ready(function() {
                 required: "Age is required",
                 number: "Please enter a valid age",
                 min: "You must be at least 18 years old"
+            },
+            phoneNumber: {
+                required: "Mobile number is required",
+                minLength: "Minimun lenght is 10 Digit",
+                maxlength: "Max lenght is 13 Digit"
+            },
+            about: {
+                required: "About is required",
             }
         },
         errorPlacement: function(error, element) {
