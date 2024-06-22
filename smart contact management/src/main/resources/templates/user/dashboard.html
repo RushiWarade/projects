@@ -8,5 +8,9 @@
 <body>
     <h1>this is dashboard</h1>
     <a th:href="@{/logout}">Logout</a>
+    <div class="">
+        <p th:text="${loggedinUser.name}" ></p>
+        <p th:text="${loggedinUser.email}" ></p>
+    </div>
 </body>
 </html>

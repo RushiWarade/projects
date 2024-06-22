@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" th:replace="Base :: parent(~{::#content},~{::title},~{::script})">
+<html lang="en" th:replace="~{Base :: parent(~{::#content},~{::title},~{::script})}">
 
 <head>
     <meta charset="UTF-8">
@@ -17,7 +17,7 @@
                     class="block p-6 border-t-[10px] border-green-700 bg-white rounded-xl shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-blue-700 dark:hover:bg-gray-700">
                     
                     <!-- message here -->
-                    <div data-th-replace="message::message"></div>
+                    <!-- <div data-th-replace="message::message"></div> -->
 
                     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                         Login Here

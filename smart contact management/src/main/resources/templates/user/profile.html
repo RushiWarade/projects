@@ -9,5 +9,10 @@
     <h1>This is profile page</h1>
 
     <a th:href="@{/logout}">Click here to logout</a>
+
+    <div class="">
+        <p th:text="${loggedinUser.name}" ></p>
+        <p th:text="${loggedinUser.email}" ></p>
+    </div>
 </body>
 </html>
