@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import java.util.*;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -76,11 +75,11 @@ public class User implements UserDetails {
         // lish of role [ ADMIN,USER]
         // collection of simple granted Authority [roles{ADMIN,USER}]
 
-        List<SimpleGrantedAuthority> roles = roleList.stream().map(role -> new SimpleGrantedAuthority(role))
-                .collect(Collectors.toList());
-        // List<SimpleGrantedAuthority> roles = roleList.stream()
-        //         .map(SimpleGrantedAuthority::new)
+        // List<SimpleGrantedAuthority> roles = roleList.stream().map(role -> new SimpleGrantedAuthority(role))
         //         .collect(Collectors.toList());
+        List<SimpleGrantedAuthority> roles = roleList.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         return roles;
 

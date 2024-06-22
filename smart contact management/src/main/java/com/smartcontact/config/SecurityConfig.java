@@ -15,75 +15,47 @@ import com.smartcontact.services.SecurityCustomerUserDetailsService;
 @Configuration
 public class SecurityConfig {
 
-    // create user and login
-    // @Bean
-    // public UserDetailsService detailsService() {
-    // UserDetails user = User
-    // .withDefaultPasswordEncoder()
-    // .username("admin123")
-    // .password("admin123")
-    // .roles("ADMIN")
-    // .build();
-    // var inMemoryUserDetailsManager = new InMemoryUserDetailsManager(user);
-    // return inMemoryUserDetailsManager ;
-    // }
-
     @Autowired
     private SecurityCustomerUserDetailsService customerUserDetailsService;
 
-    // configuration of authentication provider
+    @Autowired
+    private OAuthenticationSuccessHandler authenticationSuccessHandler;
+
+    // Configuration of authentication provider
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        // user detal service object
         daoAuthenticationProvider.setUserDetailsService(customerUserDetailsService);
-        // object of password encoder
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        // configuration
-
-        // url configuration public or privet.
         httpSecurity.authorizeHttpRequests(authorize -> {
             authorize.requestMatchers("/user/**").authenticated();
             authorize.anyRequest().permitAll();
+        });
 
-            try {
-                httpSecurity.formLogin(formLogin -> {
-                    formLogin.loginPage("/login")
-                            .loginProcessingUrl("/authenticate")
-                            .defaultSuccessUrl("/user/dashboard", true)
-                            // .failureForwardUrl("/login?error=true")
-                            .usernameParameter("email")
-                            .passwordParameter("password");
-                    // .failureHandler(new AuthenticationFailureHandler() {
+        httpSecurity.formLogin(formLogin -> {
+            formLogin.loginPage("/login")
+                    .loginProcessingUrl("/authenticate")
+                    .defaultSuccessUrl("/user/dashboard", true)
+                    .failureUrl("/login?error=true")
+                    .usernameParameter("email")
+                    .passwordParameter("password");
+        });
 
-                    // @Override
-                    // public void onAuthenticationFailure(HttpServletRequest request,
-                    // HttpServletResponse response,
-                    // AuthenticationException exception) throws IOException, ServletException {
-                    // // TODO Auto-generated method stub
-                    // throw new UnsupportedOperationException("Unimplemented method
-                    // 'onAuthenticationFailure'");
-                    // }
+        httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
-                    // });
-                });
+        httpSecurity.logout(logout -> {
+            logout.logoutUrl("/logout")
+                  .logoutSuccessUrl("/login?logout=true");
+        });
 
-                httpSecurity.csrf(AbstractHttpConfigurer::disable);
-                httpSecurity.logout(logoutForm -> {
-                    logoutForm.logoutUrl("/logout")
-                            .logoutSuccessUrl("/login?logout=true");
-                });
-
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
+        httpSecurity.oauth2Login(oauth2 -> {
+            oauth2.loginPage("/login")
+                  .successHandler(authenticationSuccessHandler);
         });
 
         return httpSecurity.build();
@@ -93,5 +65,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 }

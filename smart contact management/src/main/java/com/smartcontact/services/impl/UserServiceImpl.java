@@ -1,6 +1,5 @@
 package com.smartcontact.services.impl;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,9 +40,6 @@ public class UserServiceImpl implements UserService {
 
         user.setRoleList(List.of(AppConstaints.ROLE_USER));
         // user.setRoleList(Collections.singletonList(AppConstaints.ROLE_USER));
-
-
-
 
         logger.info(user.getProviders().toString());
 

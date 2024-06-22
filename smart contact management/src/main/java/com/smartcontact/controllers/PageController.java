@@ -17,7 +17,7 @@ import com.smartcontact.services.UserService;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class PageController {
@@ -25,9 +25,8 @@ public class PageController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/")
-    public String index(){
+    public String index() {
         return "redirect:/home";
     }
 
@@ -62,7 +61,12 @@ public class PageController {
     public String login(Model model) {
         return "login";
     }
+    
+    @PostMapping("/login")
+    public String signupPost() {
 
+        return "login";
+    }
     // signup route
     @GetMapping("/signup")
     public String signup(Model model) {
@@ -70,16 +74,15 @@ public class PageController {
         UserForms userForms = new UserForms();
         // userForms.setName("Rushi");
 
-
         model.addAttribute("userForm", userForms);
 
         return "register";
     }
 
-   @RequestMapping(value = "/do-register", method = RequestMethod.POST)
+
+    @RequestMapping(value = "/do-register", method = RequestMethod.POST)
     public String processRegister(@Valid @ModelAttribute UserForms userForm, BindingResult rBindingResult,
             HttpSession session) {
-        System.out.println("Processing registration");
         // fetch form data
         // UserForm
         System.out.println(userForm);
@@ -88,7 +91,6 @@ public class PageController {
         if (rBindingResult.hasErrors()) {
             return "register";
         }
-
 
         // save to database
 
