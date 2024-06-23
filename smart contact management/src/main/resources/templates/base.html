@@ -27,18 +27,34 @@
     <title th:replace="${title}">Base Page</title>
 </head>
 
-<div th:replace="~{navbar :: navbar}"></div>
+
 
 
 
 
 <body class="dark:bg-gray-800 bg-gray-100 dark:text-white ">
-    <!-- main content  -->
-    <div class="p-4">
-        <section th:replace="${content}"></section>
+
+    <!-- putting nav bar -->
+     <!-- if user loggedin -->
+    <div th:if="${loggedinUser}"  >
+        <div th:replace="~{user/user_navbar :: user-navbar}" ></div>
+        <!-- sidebar -->
+        <!-- <div th:replace="~{user/sidebar :: sidebar}" ></div> -->
     </div>
 
+    <!-- user not loggedin -->
+    <div th:unless="${loggedinUser}" >
+        <div th:replace="~{navbar :: navbar}"></div>
+    </div>
 
+    <!-- user loggedin sidebar -->
+     <!-- <div th:if="${variable}"></div> -->
+    
+    
+    <!-- main content  -->
+    <div class="p-4 ">
+        <section th:replace="${content}"></section>
+    </div>
 
     <!-- flow bile cdn -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>

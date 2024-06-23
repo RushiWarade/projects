@@ -73,7 +73,9 @@ function changePageTheme(theme, oldTheme) {
 
     document.querySelector("html").classList.add(theme);
     // change text on the botton
-    document.querySelector('#theme_change_button').querySelector('span').textContent = theme == "light" ? "dark" : "light";
+
+    // uncomment when show theme name to web
+    // document.querySelector('#theme_change_button').querySelector('span').textContent = theme == "light" ? "dark" : "light";
 
 
     // Change the icon class

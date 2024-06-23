@@ -40,7 +40,7 @@ public class SecurityConfig {
         httpSecurity.formLogin(formLogin -> {
             formLogin.loginPage("/login")
                     .loginProcessingUrl("/authenticate")
-                    .defaultSuccessUrl("/user/dashboard", true)
+                    .defaultSuccessUrl("/user/profile", true)
                     .failureUrl("/login?error=true")
                     .usernameParameter("email")
                     .passwordParameter("password");
