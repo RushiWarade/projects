@@ -1,15 +1,11 @@
 <div th:fragment="message" th:if="${session.message}" th:object="${session.message}"
-    th:classappend="*{ 'text-'+type+'-800 border border-'+type+'-300  dark:text-'+type+'-400 dark:border-'+type+'-800 flex items-center p-4 mb-4 text-sm rounded-lg bg-'+type+' dark:bg-'+type+'-800'}"
+    th:classappend="*{ 'text-'+type+'-800 border border-'+type+'-300  dark:text-'+type+'-400 dark:border-'+type+'-800 flex items-center p-4 mb-4 text-sm rounded-lg bg-'+type+' dark:bg-'+type+'-800  '}"
     class="" role="alert">
-    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-        fill="currentColor" viewBox="0 0 20 20">
-        <path
-            d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-    </svg>
+    <i th:classappend="*{'fa-solid '+icon+' w-4 h-4 me-3'}"  class="text-black dark:text-white" ></i>
     <span class="sr-only">Info</span>
     <div>
         <!-- <span class="font-medium">Info alert!</span>  -->
-        <span th:text="*{content}"></span>
+        <span class=" text-gray-900 dark:text-white" th:text="*{content}"></span>
     </div>
 
     <th:block  th:text="${@sessionHelper.removeMessage()}" ></th:block>

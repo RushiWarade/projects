@@ -29,12 +29,13 @@ public class ContactS {
     private String id;
     private String name;
     private String email;
-    private String phoneNumber;
+    private String address;
     private String picture;
+    private String phoneNumber;
     @Column(length = 5000)
     private String description;
     private boolean favorite = false;
-
+    
     private String websiteLink;
     private String linkdinLink;
     // private List<String> socialLink = new arrayList<>();

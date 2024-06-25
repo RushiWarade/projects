@@ -16,4 +16,6 @@ public class Message {
     @Builder.Default
     private MessageType type = MessageType.blue;
 
+    private String icon ="fa-circle-info";
+
 }

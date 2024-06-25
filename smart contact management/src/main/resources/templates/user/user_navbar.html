@@ -1,5 +1,5 @@
 <nav th:fragment="user-navbar"
-  class="bg-white border-gray-900 shadow-sm dark:bg-gray-900 sm:pl-64  fixed w-full top-0 left-0 right-0">
+  class="bg-white border-gray-900 shadow-sm dark:bg-gray-900 sm:pl-64  fixed w-full top-0 left-0 right-0 z-20">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-3 top-0 left-0 right-0  ">
 
     <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar"
@@ -17,7 +17,7 @@
     <!-- brand logo -->
     <a th:href="@{'/user/dashboard'}"
       class="flex items-center space-x-3 rtl:space-x-reverse md:hidden lg:hidden sm:hidden ">
-      <img th:src="@{'../images/telephone.png'}" class="h-8 rounded-full" alt="application logo">
+      <img th:src="@{'~/images/telephone.png'}" class="h-8 rounded-full" alt="application logo">
       <span class="self-center text-1xl font-semibold whitespace-nowrap uppercase dark:text-white">Smart Contact</span>
     </a>
     <div class=" flex md:order-2 gap-2 space-x-3 md:space-x-0 rtl:space-x-reverse">

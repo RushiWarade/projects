@@ -61,12 +61,13 @@ public class PageController {
     public String login(Model model) {
         return "login";
     }
-    
+
     @PostMapping("/login")
     public String signupPost() {
 
         return "login";
     }
+
     // signup route
     @GetMapping("/signup")
     public String signup(Model model) {
@@ -79,13 +80,9 @@ public class PageController {
         return "register";
     }
 
-
     @RequestMapping(value = "/do-register", method = RequestMethod.POST)
     public String processRegister(@Valid @ModelAttribute UserForms userForm, BindingResult rBindingResult,
             HttpSession session) {
-        // fetch form data
-        // UserForm
-        System.out.println(userForm);
 
         // validate form data
         if (rBindingResult.hasErrors()) {
@@ -94,39 +91,52 @@ public class PageController {
 
         // save to database
 
-        // userservice
+        try {
 
-        // UserForm--> User
-        // User user = User.builder()
-        // .name(userForm.getName())
-        // .email(userForm.getEmail())
-        // .password(userForm.getPassword())
-        // .about(userForm.getAbout())
-        // .phoneNumber(userForm.getPhoneNumber())
-        // .profilePic(
-        // "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75")
-        // .build();
+            User user = new User();
+            user.setName(userForm.getName());
+            user.setEmail(userForm.getEmail());
+            user.setPassword(userForm.getPassword());
+            user.setAbout(userForm.getAbout());
+            user.setPhoneNumber(userForm.getPhoneNumber());
+            user.setProfilePic(
+                    "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
 
-        User user = new User();
-        user.setName(userForm.getName());
-        user.setEmail(userForm.getEmail());
-        user.setPassword(userForm.getPassword());
-        user.setAbout(userForm.getAbout());
-        user.setPhoneNumber(userForm.getPhoneNumber());
-        user.setProfilePic(
-                "https://www.learncodewithdurgesh.com/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fdurgesh_sir.35c6cb78.webp&w=1920&q=75");
+            boolean userExist = userService.isUserExistByEmail(userForm.getEmail());
+            // System.out.println(userExist + " check user exist or not");
 
-        userService.saveUser(user);
+            if (!userExist) {
+                userService.saveUser(user);
 
-        System.out.println("user saved :");
+                Message message = Message.builder()
+                        .content("Registration Successful")
+                        .icon("fa-thumbs-up")
+                        .type(MessageType.green)
+                        .build();
 
-        // message = "Registration Successful"
+                session.setAttribute("message", message);
+            } else {
+                Message message = Message.builder()
+                        .content(user.getEmail() + ", Email already exist!. ")
+                        .icon("fa-triangle-exclamation")
+                        .type(MessageType.red)
+                        .build();
 
-        // add the message:
+                session.setAttribute("message", message);
+            }
 
-        Message message = Message.builder().content("Registration Successful").type(MessageType.green).build();
+            // add the message:
+        } catch (
 
-        session.setAttribute("message", message);
+        Exception e) {
+            Message message = Message.builder()
+                    .content("An error occurred while registration!.")
+                    .type(MessageType.red)
+                    .icon("fa-triangle-exclamation")
+                    .build();
+            session.setAttribute("message", message);
+            return "redirect:/signup";
+        }
 
         // redirectto login page
         return "redirect:/signup";

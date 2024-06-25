@@ -28,7 +28,7 @@ public class RootController {
 
         // fetch data using database
 
-        User user = service.getEmailByEmail(username);
+        User user = service.getUserByEmail(username);
         System.out.println(user.getName());
         System.out.println(user.getEmail());
 
