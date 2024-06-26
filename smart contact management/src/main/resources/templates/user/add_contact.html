@@ -25,8 +25,8 @@
                 <div class="hidden md:block md:col-span-3"></div>
                 <div class="col-span-12 md:col-span-6">
                     <div
-                        class="card block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
-                        <h1 class="text-2xl font-semibold ">Add New Contact</h1>
+                        class="card block p-4 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">
+                        <h1 class="text-2xl font-semibold font-serif ">Add New Contact</h1>
                         <p class="text-gray-500">This is contact is store on cloud.</p>
 
                         <div data-th-replace="~{message::message}"></div>
@@ -36,14 +36,14 @@
 
                             <!-- name -->
                             <div class="mb-2">
-                                <label for="input-group-1"
+                                <label for="name"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
                                 <div class="relative mb-1">
                                     <div
                                         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                         <i class="fa-solid fa-user w-4 h-4"></i>
                                     </div>
-                                    <input type="text" id="input-group-1" th:field="*{name}"
+                                    <input type="text"  th:field="*{name}"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="name">
                                 </div>
@@ -54,7 +54,7 @@
 
                             <!-- email -->
                             <div class="mb-2">
-                                <label for="input-group-1"
+                                <label for="email"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                     Email</label>
                                 <div class="relative mb-1">
@@ -62,7 +62,7 @@
                                         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                         <i class="fa-solid fa-envelope w-4 h-4"></i>
                                     </div>
-                                    <input type="email" id="input-group-1" th:field="*{email}"
+                                    <input type="email"  th:field="*{email}"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500  "
                                         placeholder="name@gmail.com">
                                 </div>
@@ -73,7 +73,7 @@
 
                             <!-- contact -->
                             <div class="mb-2">
-                                <label for="input-group-1"
+                                <label for="phoneNumber"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact
                                     No.</label>
                                 <div class="relative mb-1">
@@ -81,7 +81,7 @@
                                         class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                         <i class="fa-solid fa-phone w-4 h-4 "></i>
                                     </div>
-                                    <input type="tel" id="input-group-1" th:field="*{phoneNumber}"
+                                    <input type="tel"  th:field="*{phoneNumber}"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="9876543210">
                                 </div>
@@ -92,10 +92,10 @@
 
                             <div class="mb-2">
 
-                                <label for="message"
+                                <label for="address" 
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact
                                     Address</label>
-                                <textarea id="message" rows="4" th:field="*{address}"
+                                <textarea  rows="4" th:field="*{address}"
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Write address of your contact"></textarea>
 
@@ -108,10 +108,10 @@
 
                             <div class="mb-2">
 
-                                <label for="message"
+                                <label for="description"
                                     class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Contact
                                     Description</label>
-                                <textarea id="message" rows="4" th:field="*{description}"
+                                <textarea  rows="4" th:field="*{description}"
                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Write something about contac."></textarea>
                                 <p class="text-red-400 mx-2" th:if="${#fields.hasErrors('description')}"
@@ -134,7 +134,7 @@
                                                 class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                                 <i class="fa-solid fa-earth w-4 h-4 "></i>
                                             </div>
-                                            <input type="text" id="input-group-1" th:field="*{websiteLink}"
+                                            <input type="text"  th:field="*{websiteLink}"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="http://www.facebook.com">
                                         </div>
@@ -150,7 +150,7 @@
                                                 class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
                                                 <i class="fa-brands fa-linkedin w-4 h-4 "></i>
                                             </div>
-                                            <input type="text" id="input-group-1" th:field="*{linkdinLink}"
+                                            <input type="text"  th:field="*{linkdinLink}"
                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="http://www.linkdin.com">
                                         </div>
@@ -163,7 +163,7 @@
                              <div class="mb-2">
 
                                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                                    for="file_input">Contact image</label>
+                                    for="image-file-input">Contact image</label>
                                 <input th:field="*{picture}" id="image-file-input"
                                     class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
                                     type="file">
@@ -175,9 +175,9 @@
 
 
                             <div class="flex items-center mb-2">
-                                <input id="link-checkbox" type="checkbox" th:field="*{favorite}"
+                                <input id="favorite" type="checkbox" th:field="*{favorite}"
                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                <label for="link-checkbox"
+                                <label for="favorite"
                                     class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Is this contact is
                                     your favorite .</label>
                             </div>

@@ -3,6 +3,7 @@ package com.smartcontact.services;
 import java.util.List;
 
 import com.smartcontact.entities.ContactS;
+import com.smartcontact.entities.User;
 
 public interface ContactService {
 
@@ -26,5 +27,8 @@ public interface ContactService {
 
     // get contacts by userid list
     // List<ContactS> getByUserId(String userId);
+
+
+    List<ContactS> getByUser(User user);
 
 }

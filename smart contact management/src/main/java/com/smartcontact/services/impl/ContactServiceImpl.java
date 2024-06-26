@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.smartcontact.entities.ContactS;
+import com.smartcontact.entities.User;
 import com.smartcontact.helpers.ResourceNotFoundException;
 import com.smartcontact.repositories.ContactRepo;
 import com.smartcontact.services.ContactService;
@@ -55,6 +56,11 @@ public class ContactServiceImpl implements ContactService {
     public List<ContactS> search(String name, String email, String phoneNumber) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'search'");
+    }
+
+    @Override
+    public List<ContactS> getByUser(User user) {
+        return contactRepo.findByUser(user);
     }
 
     // @Override

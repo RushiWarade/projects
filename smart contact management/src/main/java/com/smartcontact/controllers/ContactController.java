@@ -1,5 +1,6 @@
 package com.smartcontact.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -71,12 +72,17 @@ public class ContactController {
         logger.info(contactForm.getPicture().getOriginalFilename());
         String filename = UUID.randomUUID().toString();
 
+        String fileUrl = null;
+
         try {
 
             String username = Helper.getEmailLoggedInUser(authentication);
 
-            // image upload code
-            String fileUrl = imageServices.uploadImage(contactForm.getPicture(), filename);
+            if (!contactForm.getPicture().isEmpty()) {
+                // image upload code
+                fileUrl = imageServices.uploadImage(contactForm.getPicture(), filename);
+
+            }
 
             User user = userService.getUserByEmail(username);
 
@@ -124,6 +130,20 @@ public class ContactController {
         }
 
         return "redirect:/user/contact/add-contact";
+    }
+
+    @GetMapping
+    public String showAllContacts(Model model, Authentication authentication) {
+
+        String username = Helper.getEmailLoggedInUser(authentication);
+
+        User user = userService.getUserByEmail(username);
+
+        List<ContactS> contacts = contactService.getByUser(user);
+
+        model.addAttribute("contacts", contacts);
+
+        return "user/contacts";
     }
 
 }
