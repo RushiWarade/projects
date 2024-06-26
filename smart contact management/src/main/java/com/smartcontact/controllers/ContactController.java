@@ -1,5 +1,9 @@
 package com.smartcontact.controllers;
 
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,7 @@ import com.smartcontact.helpers.Message;
 import com.smartcontact.helpers.MessageType;
 import com.smartcontact.services.ContactService;
 import com.smartcontact.services.UserService;
+import com.smartcontact.services.ImageServices;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -33,6 +38,11 @@ public class ContactController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ImageServices imageServices;
+
+    private Logger logger = LoggerFactory.getLogger(ContactController.class);
+
     // add contact page
     @GetMapping("/add-contact")
     public String addContactView(Model model) {
@@ -45,6 +55,8 @@ public class ContactController {
     @PostMapping("/add_contact")
     public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult bindingResult,
             Authentication authentication, HttpSession session) {
+
+        // check validation
         if (bindingResult.hasErrors()) {
             Message message = Message.builder()
                     .content("Please required following fields..")
@@ -54,12 +66,17 @@ public class ContactController {
 
             session.setAttribute("message", message);
             return "user/add_contact";
-
         }
+
+        logger.info(contactForm.getPicture().getOriginalFilename());
+        String filename = UUID.randomUUID().toString();
 
         try {
 
             String username = Helper.getEmailLoggedInUser(authentication);
+
+            // image upload code
+            String fileUrl = imageServices.uploadImage(contactForm.getPicture(), filename);
 
             User user = userService.getUserByEmail(username);
 
@@ -74,6 +91,8 @@ public class ContactController {
             contactS.setLinkdinLink(contactForm.getLinkdinLink());
             contactS.setFavorite(contactForm.isFavorite());
             contactS.setUser(user);
+            contactS.setPicture(fileUrl);
+            contactS.setCloudinaryImagePublicId(filename);
 
             // System.out.println(contactForm);
 

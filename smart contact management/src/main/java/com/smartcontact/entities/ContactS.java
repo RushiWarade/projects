@@ -2,7 +2,6 @@ package com.smartcontact.entities;
 
 import java.util.*;
 
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -35,7 +34,9 @@ public class ContactS {
     @Column(length = 5000)
     private String description;
     private boolean favorite = false;
-    
+
+    private String cloudinaryImagePublicId;
+
     private String websiteLink;
     private String linkdinLink;
     // private List<String> socialLink = new arrayList<>();

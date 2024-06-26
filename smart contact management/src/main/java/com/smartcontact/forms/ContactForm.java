@@ -1,6 +1,8 @@
 package com.smartcontact.forms;
 
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.Email;
 
 // import org.hibernate.validator.constraints.Email;
@@ -42,5 +44,5 @@ public class ContactForm {
 
     private String linkdinLink;
     
-    private String picture;
+    private MultipartFile picture;
 }

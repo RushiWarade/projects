@@ -24,13 +24,13 @@ public class RootController {
         }
 
         String username = Helper.getEmailLoggedInUser(authentication);
-        System.out.println(username);
+        // System.out.println(username);
 
         // fetch data using database
 
         User user = service.getUserByEmail(username);
-        System.out.println(user.getName());
-        System.out.println(user.getEmail());
+        // System.out.println(user.getName());
+        // System.out.println(user.getEmail());
 
         model.addAttribute("loggedinUser", user);
 
