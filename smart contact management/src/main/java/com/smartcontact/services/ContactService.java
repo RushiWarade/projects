@@ -2,6 +2,9 @@ package com.smartcontact.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
 
@@ -28,7 +31,12 @@ public interface ContactService {
     // get contacts by userid list
     // List<ContactS> getByUserId(String userId);
 
+    Page<ContactS> getByUser(User user, int page, int size, String sortBy, String direction);
 
-    List<ContactS> getByUser(User user);
+    Page<ContactS> searchByNameContain(User user, String name, int page, int size, String sortBy, String direction);
+
+    Page<ContactS> searchByEmailContain(User user, String email, int page, int size, String sortBy, String direction);
+
+    Page<ContactS> searchByPhoneNumberContain(User user, String phoneNumber, int page, int size, String sortBy, String direction);
 
 }

@@ -6,15 +6,19 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
 import com.smartcontact.forms.ContactForm;
+import com.smartcontact.helpers.AppConstaints;
 import com.smartcontact.helpers.Helper;
 import com.smartcontact.helpers.Message;
 import com.smartcontact.helpers.MessageType;
@@ -55,7 +59,7 @@ public class ContactController {
 
     @PostMapping("/add_contact")
     public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult bindingResult,
-            Authentication authentication, HttpSession session) {
+                              Authentication authentication, HttpSession session) {
 
         // check validation
         if (bindingResult.hasErrors()) {
@@ -133,15 +137,68 @@ public class ContactController {
     }
 
     @GetMapping
-    public String showAllContacts(Model model, Authentication authentication) {
+    public String showAllContacts(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "3") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            Model model,
+            Authentication authentication) {
 
         String username = Helper.getEmailLoggedInUser(authentication);
 
         User user = userService.getUserByEmail(username);
 
-        List<ContactS> contacts = contactService.getByUser(user);
+        Page<ContactS> pageContacts = contactService.getByUser(user, page, size, sortBy, direction);
 
-        model.addAttribute("contacts", contacts);
+        // Debugging: Print pageContact content to console
+        // pageContacts.getContent().forEach(contact ->
+        // System.out.println(contact.getName() + " " + contact.getEmail()));
+
+        // List<ContactS> contactS = pageContacts.getContent();
+        // System.out.println(pageContacts.getNumber());
+
+        // contactS.forEach(contacts -> System.out.println(contacts.getName()));
+        // System.out.println("page size " + AppConstaints.PAGE_SIZE);
+
+        model.addAttribute("pageContent", pageContacts);
+        model.addAttribute("pageSize", AppConstaints.PAGE_SIZE);
+
+        return "user/contacts";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam("field") String field,
+                         @RequestParam("keyword") String keyword,
+                         @RequestParam(value = "page", defaultValue = "0") int page,
+                         @RequestParam(value = "size", defaultValue = "3") int size,
+                         @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+                         @RequestParam(value = "direction", defaultValue = "asc") String direction,
+                         Model model,
+                         Authentication authentication) {
+
+        User user = userService.getUserByEmail(Helper.getEmailLoggedInUser(authentication));
+//                            String user = Helper.getEmailLoggedInUser(authentication);
+        Page<ContactS> contactSPage = null;
+
+        if (field.equals("name")) {
+            System.out.println("search using name");
+            contactSPage = contactService.searchByNameContain(user, keyword, page, size, sortBy, direction);
+        } else if (field.equals("email")) {
+            System.out.println("search using email");
+
+            contactSPage = contactService.searchByEmailContain(user, keyword, page, size, sortBy, direction);
+
+        } else if (field.equals("phoneNumber")) {
+            System.out.println("search using number");
+            System.out.println(keyword);
+            System.out.println(field);
+
+            contactSPage = contactService.searchByPhoneNumberContain(user, keyword, page, size, sortBy, direction);
+        }
+
+        model.addAttribute("pageContent", contactSPage);
+        model.addAttribute("pageSize", AppConstaints.PAGE_SIZE);
 
         return "user/contacts";
     }
