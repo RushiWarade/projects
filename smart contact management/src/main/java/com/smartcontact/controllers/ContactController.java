@@ -1,12 +1,11 @@
 package com.smartcontact.controllers;
 
-import java.util.List;
+import java.io.IOException;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -15,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
 import com.smartcontact.forms.ContactForm;
@@ -31,6 +32,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @RequestMapping("/user/contact")
@@ -46,6 +48,9 @@ public class ContactController {
     @Autowired
     private ImageServices imageServices;
 
+    @Autowired
+    private Cloudinary cloudinary;
+
     private Logger logger = LoggerFactory.getLogger(ContactController.class);
 
     // add contact page
@@ -59,7 +64,7 @@ public class ContactController {
 
     @PostMapping("/add_contact")
     public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult bindingResult,
-                              Authentication authentication, HttpSession session) {
+            Authentication authentication, HttpSession session) {
 
         // check validation
         if (bindingResult.hasErrors()) {
@@ -169,16 +174,16 @@ public class ContactController {
 
     @GetMapping("/search")
     public String search(@RequestParam("field") String field,
-                         @RequestParam("keyword") String keyword,
-                         @RequestParam(value = "page", defaultValue = "0") int page,
-                         @RequestParam(value = "size", defaultValue = "3") int size,
-                         @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
-                         @RequestParam(value = "direction", defaultValue = "asc") String direction,
-                         Model model,
-                         Authentication authentication) {
+            @RequestParam("keyword") String keyword,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "3") int size,
+            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "asc") String direction,
+            Model model,
+            Authentication authentication) {
 
         User user = userService.getUserByEmail(Helper.getEmailLoggedInUser(authentication));
-//                            String user = Helper.getEmailLoggedInUser(authentication);
+        // String user = Helper.getEmailLoggedInUser(authentication);
         Page<ContactS> contactSPage = null;
 
         if (field.equals("name")) {
@@ -190,9 +195,9 @@ public class ContactController {
             contactSPage = contactService.searchByEmailContain(user, keyword, page, size, sortBy, direction);
 
         } else if (field.equals("phoneNumber")) {
-            System.out.println("search using number");
-            System.out.println(keyword);
-            System.out.println(field);
+            // System.out.println("search using number");
+            // System.out.println(keyword);
+            // System.out.println(field);
 
             contactSPage = contactService.searchByPhoneNumberContain(user, keyword, page, size, sortBy, direction);
         }
@@ -201,6 +206,29 @@ public class ContactController {
         model.addAttribute("pageSize", AppConstaints.PAGE_SIZE);
 
         return "user/contacts";
+    }
+
+    @GetMapping("/delete/{contactId}")
+    public String deleteContactById(@PathVariable String contactId, HttpSession session) throws IOException {
+        // System.out.println(contactId);
+
+        ContactS contactS = contactService.getById(contactId);
+
+        // delete the contact imagein cloudinary
+        if (contactS.getCloudinaryImagePublicId() != null) {
+            cloudinary.uploader().destroy(contactS.getCloudinaryImagePublicId(), ObjectUtils.emptyMap());
+        }
+
+        contactService.delete(contactId);
+        Message message = Message.builder()
+                .content("Contact Deleted successfully!")
+                .type(MessageType.green)
+                .icon("fa-thumbs-up")
+                .build();
+
+        session.setAttribute("message", message);
+
+        return "redirect:/user/contact";
     }
 
 }

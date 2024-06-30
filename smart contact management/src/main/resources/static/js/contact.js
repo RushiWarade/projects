@@ -3,6 +3,7 @@
 const viewContactModal = document.getElementById("view_contact_modal");
 
 const baseURL = "http://localhost:8080";
+// const baseURL = "http://192.168.247.215:8080";
 
 // options with default values
 const options = {
@@ -63,6 +64,50 @@ async function loadContactData(id) {
         console.log(error);
     }
 }
+
+
+
+function deleteContact(id) {
+    console.log(id);
+
+    const swalWithTailwindButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded",
+            cancelButton: "bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+        },
+        buttonsStyling: false
+    });
+
+    swalWithTailwindButtons.fire({
+        title: "Are you sure?",
+        text: "You won't to delete this contact!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // swalWithTailwindButtons.fire({
+            //     title: "Deleted!",
+            //     text: "Your file has been deleted.",
+            //     icon: "success"
+            // });
+            window.location.href = `${baseURL}/user/contact/delete/${id}`;
+        } else if (
+            result.dismiss === Swal.DismissReason.cancel
+        ) {
+            swalWithTailwindButtons.fire({
+                title: "Cancelled",
+                text: "Your imaginary file is safe :)",
+                icon: "error"
+            });
+        }
+    });
+}
+
+
+
 
 
 
