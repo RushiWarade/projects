@@ -231,4 +231,56 @@ public class ContactController {
         return "redirect:/user/contact";
     }
 
+    @GetMapping("/update/{contactId}")
+    public String updateContactView(@PathVariable String contactId, Model model, HttpSession httpSession) {
+
+        ContactS contact = contactService.getById(contactId);
+
+        ContactForm contactForm = new ContactForm();
+        contactForm.setName(contact.getName());
+        contactForm.setEmail(contact.getEmail());
+        contactForm.setPhoneNumber(contact.getPhoneNumber());
+        contactForm.setDescription(contact.getDescription());
+        contactForm.setAddress(contact.getAddress());
+        contactForm.setContactImage(contact.getPicture());
+        contactForm.setLinkdinLink(contact.getLinkdinLink());
+        contactForm.setWebsiteLink(contact.getWebsiteLink());
+        contactForm.setFavorite(contact.isFavorite());
+        contactForm.setId(contact.getId());
+
+        model.addAttribute("contactForm", contactForm);
+
+        return "user/update_contact";
+    }
+
+    @PostMapping("/update")
+    public String updateContactPrecess(@ModelAttribute ContactForm contactForm, HttpSession session) {
+
+        ContactS contactS = new ContactS();
+
+        contactS.setName(contactForm.getName());
+        contactS.setEmail(contactForm.getEmail());
+        contactS.setPhoneNumber(contactForm.getPhoneNumber());
+        contactS.setDescription(contactForm.getDescription());
+        contactS.setAddress(contactForm.getAddress());
+        contactS.setLinkdinLink(contactForm.getLinkdinLink());
+        contactS.setWebsiteLink(contactForm.getWebsiteLink());
+        contactS.setFavorite(contactForm.isFavorite());
+        contactS.setId(contactForm.getId());
+        // contactS.setp
+
+        contactService.update(contactS);
+        System.out.println("contact form id check " + contactForm.getId());
+
+        Message message = Message.builder()
+                .content("Contact Updated successfully!")
+                .type(MessageType.green)
+                .icon("fa-thumbs-up")
+                .build();
+
+        session.setAttribute("message", message);
+
+        return "redirect:/user/contact";
+    }
+
 }

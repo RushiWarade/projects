@@ -30,8 +30,23 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactS update(ContactS contacts) {
+        System.out.println("contact id " + contacts.getId());
 
-        return contactRepo.save(contacts);
+        ContactS contactS2 = contactRepo.getById(contacts.getId());
+        if (contactS2 != null) {
+            contactS2.setName(contacts.getName());
+            contactS2.setEmail(contacts.getEmail());
+            contactS2.setPhoneNumber(contacts.getPhoneNumber());
+            contactS2.setDescription(contacts.getDescription());
+            contactS2.setAddress(contacts.getAddress());
+            contactS2.setLinkdinLink(contacts.getLinkdinLink());
+            contactS2.setWebsiteLink(contacts.getWebsiteLink());
+            contactS2.setFavorite(contacts.isFavorite());
+        } else {
+            new ResourceNotFoundException("User not found");
+        }
+
+        return contactRepo.save(contactS2);
     }
 
     @Override
@@ -77,14 +92,16 @@ public class ContactServiceImpl implements ContactService {
     // }
 
     @Override
-    public Page<ContactS> searchByNameContain(User user, String name, int page, int size, String sortBy, String direction) {
+    public Page<ContactS> searchByNameContain(User user, String name, int page, int size, String sortBy,
+            String direction) {
         Sort sort = sortBy.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
         return contactRepo.findByUserAndNameContaining(user, name, pageable);
     }
 
     @Override
-    public Page<ContactS> searchByEmailContain(User user, String email, int page, int size, String sortBy, String direction) {
+    public Page<ContactS> searchByEmailContain(User user, String email, int page, int size, String sortBy,
+            String direction) {
         Sort sort = sortBy.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
         return contactRepo.findByUserAndEmailContaining(user, email, pageable);
@@ -92,7 +109,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public Page<ContactS> searchByPhoneNumberContain(User user, String phoneNumber, int page, int size, String sortBy,
-                                                     String direction) {
+            String direction) {
         Sort sort = sortBy.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
         return contactRepo.findByUserAndPhoneNumberContaining(user, phoneNumber, pageable);

@@ -3,7 +3,6 @@ package com.smartcontact.services;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
