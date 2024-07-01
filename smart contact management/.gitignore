@@ -34,4 +34,5 @@ build/
 
 
 
-/application.properties
+# Ignore environment-specific properties files
+src/main/resources/application-dev.properties
