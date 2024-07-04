@@ -1,5 +1,7 @@
 package com.smartcontact.repositories;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +17,8 @@ public interface ContactRepo extends JpaRepository<ContactS, String> {
 
     // custom finder method
     Page<ContactS> findByUser(User user, Pageable pageable);
+
+    List<ContactS> findByUser(User user);
 
     // custom finder query
     // @Query("SELECT C FROM ContactS where c.userId = :userId")

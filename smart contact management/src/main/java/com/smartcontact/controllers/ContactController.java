@@ -1,12 +1,13 @@
 package com.smartcontact.controllers;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -29,7 +30,7 @@ import com.smartcontact.services.ContactService;
 import com.smartcontact.services.UserService;
 import com.smartcontact.services.ImageServices;
 
-import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -67,7 +68,7 @@ public class ContactController {
 
     @PostMapping("/add_contact")
     public String saveContact(@Valid @ModelAttribute ContactForm contactForm, BindingResult bindingResult,
-            Authentication authentication, HttpSession session) {
+                              Authentication authentication, HttpSession session) {
 
         // check validation
         if (bindingResult.hasErrors()) {
@@ -177,13 +178,13 @@ public class ContactController {
 
     @GetMapping("/search")
     public String search(@RequestParam("field") String field,
-            @RequestParam("keyword") String keyword,
-            @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = "3") int size,
-            @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
-            @RequestParam(value = "direction", defaultValue = "asc") String direction,
-            Model model,
-            Authentication authentication) {
+                         @RequestParam("keyword") String keyword,
+                         @RequestParam(value = "page", defaultValue = "0") int page,
+                         @RequestParam(value = "size", defaultValue = "3") int size,
+                         @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+                         @RequestParam(value = "direction", defaultValue = "asc") String direction,
+                         Model model,
+                         Authentication authentication) {
 
         User user = userService.getUserByEmail(Helper.getEmailLoggedInUser(authentication));
         // String user = Helper.getEmailLoggedInUser(authentication);
@@ -313,7 +314,7 @@ public class ContactController {
     // send email contact processing
     @PostMapping("/email/{contactId}")
     public String sendEmailToContact(@ModelAttribute EmailForm emailForm, @PathVariable String contactId,
-            HttpSession session) {
+                                     HttpSession session) {
 
         // System.out.println("contact id " + contactId);
         boolean contactExist = contactService.existById(contactId);
@@ -359,4 +360,27 @@ public class ContactController {
 
     }
 
+    @GetMapping("/export-contacts")
+    public void exportContacts(HttpServletResponse response, Authentication authentication) {
+
+        String email = Helper.getEmailLoggedInUser(authentication);
+        System.out.println(email);
+        User user = userService.getUserByEmail(email);
+
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; file=contacts.csv");
+
+        try (PrintWriter writer = response.getWriter()) {
+            writer.write("Name,Email,Phone,Address\n"); // CSV header
+            // Fetch contacts for the logged-in user
+            List<ContactS> contacts = contactService.LoginUserContacts(user);
+
+            // Write contact data to CSV
+            for (ContactS contact : contacts) {
+                writer.write(contact.getName() + "," + contact.getEmail() + "," + contact.getPhoneNumber() + "," + contact.getAddress() + "\n");
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

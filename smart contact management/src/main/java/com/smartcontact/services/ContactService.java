@@ -43,4 +43,7 @@ public interface ContactService {
 
     void sendEmail(EmailForm emailForm );
 
+
+    List<ContactS> LoginUserContacts(User  user);
+
 }

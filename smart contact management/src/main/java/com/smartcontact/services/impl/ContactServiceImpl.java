@@ -149,4 +149,9 @@ public class ContactServiceImpl implements ContactService {
         return contactRepo.existsById(id);
     }
 
+    @Override
+    public List<ContactS> LoginUserContacts(User user) {
+       return contactRepo.findByUser(user);
+    }
+
 }
