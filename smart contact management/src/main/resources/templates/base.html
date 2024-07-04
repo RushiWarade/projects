@@ -42,7 +42,7 @@
 
 
 
-<body class="dark:bg-gray-800 bg-gray-100 dark:text-white ">
+<body class="dark:bg-gray-700 bg-gray-100 dark:text-white ">
     
     <!-- putting nav bar -->
     <!-- if user loggedin -->
@@ -62,10 +62,17 @@
     
     
     <!-- main content  -->
-    <div class="p-4 ">
+    <div class="p-4 mt-14">
         <section th:replace="${content}"></section>
     </div>
     
+
+    <!-- footer -->
+
+    <div class="" th:replace="~{footer :: footer}" ></div>
+
+
+
     <!-- sweet alert cdn -->
     
     <!-- flow bile cdn -->

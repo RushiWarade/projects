@@ -44,7 +44,7 @@ async function loadContactData(id) {
     console.log(id);
     try {
         const data = await (await fetch(`${baseURL}/api/contact/${id}`)).json();
-        console.log(data);
+        // console.log(data.id);
 
         document.querySelector("#contact_name").innerHTML = data.name;
         document.querySelector("#contact_email").innerHTML = data.email;
@@ -56,6 +56,9 @@ async function loadContactData(id) {
         document.querySelector("#contact_website").innerHTML = data.websiteLink;
         const website = document.querySelector("#contact_website").innerHTML = data.websiteLink;
         document.querySelector("#contact_image").src = data.picture;
+        const sendEmail = document.querySelector("#send_email");
+
+        sendEmail.href = `/user/contact/email/${data.id}`;
 
         // (website.data.websiteLink != "") ? website.style.display = none : website.style.display = "";
 

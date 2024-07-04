@@ -21,6 +21,9 @@ public class SecurityConfig {
     @Autowired
     private OAuthenticationSuccessHandler authenticationSuccessHandler;
 
+    @Autowired
+    private AuthenticateFailwareHandler authenticateFailwareHandler;
+
     // Configuration of authentication provider
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -43,19 +46,20 @@ public class SecurityConfig {
                     .defaultSuccessUrl("/user/profile", true)
                     .failureUrl("/login?error=true")
                     .usernameParameter("email")
-                    .passwordParameter("password");
+                    .passwordParameter("password")
+                    .failureHandler(authenticateFailwareHandler);
         });
 
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
 
         httpSecurity.logout(logout -> {
             logout.logoutUrl("/logout")
-                  .logoutSuccessUrl("/login?logout=true");
+                    .logoutSuccessUrl("/login?logout=true");
         });
 
         httpSecurity.oauth2Login(oauth2 -> {
             oauth2.loginPage("/login")
-                  .successHandler(authenticationSuccessHandler);
+                    .successHandler(authenticationSuccessHandler);
         });
 
         return httpSecurity.build();

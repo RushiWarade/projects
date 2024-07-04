@@ -1,5 +1,6 @@
 package com.smartcontact.helpers;
 
+
 public class AppConstaints {
 
     public static final String APP_NAME = "SMART CONTACT MANAGEMENT";
@@ -10,4 +11,10 @@ public class AppConstaints {
     public static final String CONTACT_IMAGE_CROP = "fill";
 
     public static final int PAGE_SIZE = 3;
+
+    public static final String BASE_URL = "http://localhost:8080";
+
+    // @Value("${spring.mail.username}")
+    // public static String EMAIL_FROM;
+
 }

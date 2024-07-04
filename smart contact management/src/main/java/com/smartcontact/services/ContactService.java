@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
+import com.smartcontact.forms.EmailForm;
 
 public interface ContactService {
 
@@ -20,6 +21,8 @@ public interface ContactService {
 
     // get contact by id
     ContactS getById(String id);
+
+    boolean existById(String id);
 
     // delete contact
     void delete(String id);
@@ -37,5 +40,7 @@ public interface ContactService {
     Page<ContactS> searchByEmailContain(User user, String email, int page, int size, String sortBy, String direction);
 
     Page<ContactS> searchByPhoneNumberContain(User user, String phoneNumber, int page, int size, String sortBy, String direction);
+
+    void sendEmail(EmailForm emailForm );
 
 }

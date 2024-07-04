@@ -80,7 +80,8 @@
                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row"
                                         class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <img class="w-10 h-10 rounded-full dark:bg-white cursor-pointer "
+                                        <img th:onclick="loadContactData([[${c.id}]])"
+                                            class="w-10 h-10 rounded-full dark:bg-white cursor-pointer "
                                             th:src="@{${c.picture}}" onerror="this.src='/images/default-profile.png'"
                                             alt="Profile image">
                                         <div class="pl-3">
@@ -103,9 +104,9 @@
                                     <td class="px-2 py-4">
                                         <a class="p-1" th:href="@{'/user/contact/update/'+${c.id}}"><i
                                                 class="fa-regular fa-pen-to-square"></i></a>
-                                        <button class="p-1" th:onclick="loadContactData([[${c.id}]])">
+                                        <!-- <button class="p-1" th:onclick="loadContactData([[${c.id}]])">
                                             <i class="fa-solid fa-eye"></i>
-                                        </button>
+                                        </button> -->
                                         <button th:onclick="deleteContact([[${c.id}]])" class="p-1"><i
                                                 class="fa-solid fa-trash"></i></button>
                                     </td>

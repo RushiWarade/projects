@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
 import com.smartcontact.forms.ContactForm;
+import com.smartcontact.forms.EmailForm;
 import com.smartcontact.helpers.AppConstaints;
 import com.smartcontact.helpers.Helper;
 import com.smartcontact.helpers.Message;
@@ -27,6 +29,7 @@ import com.smartcontact.services.ContactService;
 import com.smartcontact.services.UserService;
 import com.smartcontact.services.ImageServices;
 
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
@@ -187,10 +190,10 @@ public class ContactController {
         Page<ContactS> contactSPage = null;
 
         if (field.equals("name")) {
-            System.out.println("search using name");
+            // System.out.println("search using name");
             contactSPage = contactService.searchByNameContain(user, keyword, page, size, sortBy, direction);
         } else if (field.equals("email")) {
-            System.out.println("search using email");
+            // System.out.println("search using email");
 
             contactSPage = contactService.searchByEmailContain(user, keyword, page, size, sortBy, direction);
 
@@ -247,6 +250,7 @@ public class ContactController {
         contactForm.setWebsiteLink(contact.getWebsiteLink());
         contactForm.setFavorite(contact.isFavorite());
         contactForm.setId(contact.getId());
+        contactForm.setContactImage(contact.getPicture());
 
         model.addAttribute("contactForm", contactForm);
 
@@ -267,10 +271,20 @@ public class ContactController {
         contactS.setWebsiteLink(contactForm.getWebsiteLink());
         contactS.setFavorite(contactForm.isFavorite());
         contactS.setId(contactForm.getId());
-        // contactS.setp
+
+        if (contactForm.getPicture() != null && !contactForm.getPicture().isEmpty()) {
+            logger.info("file is not empty");
+            String fileName = UUID.randomUUID().toString();
+            String imageUrl = imageServices.uploadImage(contactForm.getPicture(), fileName);
+            contactS.setCloudinaryImagePublicId(fileName);
+            contactS.setPicture(imageUrl);
+
+        } else {
+            logger.info("file is empty");
+        }
 
         contactService.update(contactS);
-        System.out.println("contact form id check " + contactForm.getId());
+        // System.out.println("contact form id check " + contactForm.getId());
 
         Message message = Message.builder()
                 .content("Contact Updated successfully!")
@@ -281,6 +295,68 @@ public class ContactController {
         session.setAttribute("message", message);
 
         return "redirect:/user/contact";
+    }
+
+    // Send email to contact view
+    @GetMapping("/email/{contactId}")
+    public String sendEmailToContactView(@PathVariable String contactId, Model model) {
+
+        EmailForm emailForm = new EmailForm();
+
+        emailForm.setContactId(contactId);
+
+        model.addAttribute("emailForm", emailForm);
+
+        return "user/send_email";
+    }
+
+    // send email contact processing
+    @PostMapping("/email/{contactId}")
+    public String sendEmailToContact(@ModelAttribute EmailForm emailForm, @PathVariable String contactId,
+            HttpSession session) {
+
+        // System.out.println("contact id " + contactId);
+        boolean contactExist = contactService.existById(contactId);
+
+        // System.out.println(contactExist);
+        if (contactExist) {
+
+            ContactS contact = contactService.getById(contactId);
+
+            emailForm.setEmailTo(contact.getEmail());
+            emailForm.setEmailFrom("rushikeshwarade12@gmail.com");
+
+            try {
+                // System.out.println(emailForm);
+                contactService.sendEmail(emailForm);
+                Message message = Message.builder()
+                        .content("Email sent successfully!")
+                        .type(MessageType.green)
+                        .icon("fa-check-circle")
+                        .build();
+                session.setAttribute("message", message);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Message message = Message.builder()
+                        .content("Failed to send email!")
+                        .type(MessageType.red)
+                        .icon("fa-times-circle")
+                        .build();
+                session.setAttribute("message", message);
+            }
+            return "redirect:/user/contact";
+
+        } else {
+
+            Message message = Message.builder()
+                    .content("Contact does not exist!")
+                    .type(MessageType.green)
+                    .icon("fa-triangle-exclamation")
+                    .build();
+            session.setAttribute("message", message);
+            return "redirect:/user/contact";
+        }
+
     }
 
 }

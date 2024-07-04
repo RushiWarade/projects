@@ -5,7 +5,7 @@
     <span class="sr-only">Info</span>
     <div>
         <!-- <span class="font-medium">Info alert!</span>  -->
-        <span class=" text-gray-300 " th:text="*{content}"></span>
+        <span class=" text-gray-300 " th:utext="*{content}"></span>
     </div>
 
     <th:block  th:text="${@sessionHelper.removeMessage()}" ></th:block>

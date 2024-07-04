@@ -7,6 +7,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,9 @@ import com.smartcontact.helpers.ResourceNotFoundException;
 import com.smartcontact.repositories.UserRepo;
 import com.smartcontact.services.UserService;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -24,6 +29,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JavaMailSender mailSender;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -107,6 +115,28 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         return userRepo.findByEmail(email).orElse(null);
+    }
+
+    @Override
+    public void varifyEmail(User user) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            String varifyLink = "<a href=" + AppConstaints.BASE_URL + "/varify/" + user.getUserId()
+                    + ">varify your Email</a>";
+
+            helper.setTo(user.getEmail());
+            helper.setFrom("rushikeshwarade12@gmail.com");
+            helper.setSubject("Varify your Email address.");
+            helper.setText(varifyLink, true);
+
+            mailSender.send(message);
+
+        } catch (MessagingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 
 }

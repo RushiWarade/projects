@@ -7,19 +7,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import com.smartcontact.entities.ContactS;
 import com.smartcontact.entities.User;
+import com.smartcontact.forms.EmailForm;
 import com.smartcontact.helpers.ResourceNotFoundException;
 import com.smartcontact.repositories.ContactRepo;
 import com.smartcontact.services.ContactService;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private ContactRepo contactRepo;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public ContactS save(ContactS contacts) {
@@ -30,7 +39,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public ContactS update(ContactS contacts) {
-        System.out.println("contact id " + contacts.getId());
+        // System.out.println("contact id " + contacts.getId());
 
         ContactS contactS2 = contactRepo.getById(contacts.getId());
         if (contactS2 != null) {
@@ -42,10 +51,12 @@ public class ContactServiceImpl implements ContactService {
             contactS2.setLinkdinLink(contacts.getLinkdinLink());
             contactS2.setWebsiteLink(contacts.getWebsiteLink());
             contactS2.setFavorite(contacts.isFavorite());
+            contactS2.setPicture(contacts.getPicture());
+            contactS2.setCloudinaryImagePublicId(contacts.getCloudinaryImagePublicId());
+
         } else {
             new ResourceNotFoundException("User not found");
         }
-
         return contactRepo.save(contactS2);
     }
 
@@ -113,6 +124,29 @@ public class ContactServiceImpl implements ContactService {
         Sort sort = sortBy.equals("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         var pageable = PageRequest.of(page, size, sort);
         return contactRepo.findByUserAndPhoneNumberContaining(user, phoneNumber, pageable);
+    }
+
+    @Override
+    public void sendEmail(EmailForm emailForm) {
+
+        MimeMessage message = javaMailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setTo(emailForm.getEmailTo());
+            helper.setSubject(emailForm.getEmailSubject());
+            helper.setText(emailForm.getEmailMessage());
+            helper.setFrom(emailForm.getEmailFrom());
+            javaMailSender.send(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @Override
+    public boolean existById(String id) {
+        return contactRepo.existsById(id);
     }
 
 }
